@@ -26,12 +26,16 @@ func DrawOnCanvas(canvas *vt.Canvas, m image.Image, drawRune rune) error {
 	}
 	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
 		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-			c := color.NRGBAModel.Convert(img.At(x, y)).(color.NRGBA)
-			vc := vt.White // default
-			if found, ok := PaletteColorMap[[3]uint8{c.R, c.G, c.B}]; ok {
-				vc = found
+			if IsVT {
+				canvas.Plot(uint(x), uint(y), drawRune)
+			} else {
+				c := color.NRGBAModel.Convert(img.At(x, y)).(color.NRGBA)
+				vc := vt.White // default
+				if found, ok := PaletteColorMap[[3]uint8{c.R, c.G, c.B}]; ok {
+					vc = found
+				}
+				canvas.PlotColor(uint(x), uint(y), vc, drawRune)
 			}
-			canvas.PlotColor(uint(x), uint(y), vc, drawRune)
 		}
 	}
 	return nil
@@ -93,12 +97,16 @@ func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint, dr
 
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			c := color.NRGBAModel.Convert(indexedImg.At(x, y)).(color.NRGBA)
-			vc := vt.White // default
-			if found, ok := PaletteColorMap[[3]uint8{c.R, c.G, c.B}]; ok {
-				vc = found
+			if IsVT {
+				canvas.Plot(col+uint(x), row+uint(y), drawRune)
+			} else {
+				c := color.NRGBAModel.Convert(indexedImg.At(x, y)).(color.NRGBA)
+				vc := vt.White // default
+				if found, ok := PaletteColorMap[[3]uint8{c.R, c.G, c.B}]; ok {
+					vc = found
+				}
+				canvas.PlotColor(col+uint(x), row+uint(y), vc, drawRune)
 			}
-			canvas.PlotColor(col+uint(x), row+uint(y), vc, drawRune)
 		}
 	}
 }
