@@ -38,9 +38,10 @@ func DrawOnCanvas(canvas *vt.Canvas, m image.Image, drawRune rune) error {
 }
 
 // DrawTextImage renders an image file into a region of a VT100 Canvas using colored
-// block characters. col and row specify the top-left corner (0-indexed canvas
-// coordinates); cols and rows specify the available area in terminal cells.
-func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint) {
+// characters. col and row specify the top-left corner (0-indexed canvas coordinates);
+// cols and rows specify the available area in terminal cells. The drawRune parameter
+// specifies the character used for each pixel (typically BlockRune or ASCIIRune).
+func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint, drawRune rune) {
 	f, err := os.Open(path)
 	if err != nil {
 		return
@@ -97,7 +98,7 @@ func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint) {
 			if found, ok := PaletteColorMap[[3]uint8{c.R, c.G, c.B}]; ok {
 				vc = found
 			}
-			canvas.PlotColor(col+uint(x), row+uint(y), vc, BlockRune)
+			canvas.PlotColor(col+uint(x), row+uint(y), vc, drawRune)
 		}
 	}
 }

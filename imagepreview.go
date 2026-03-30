@@ -16,12 +16,12 @@ var (
 	// IsITerm2 is true when running inside iTerm2 (which sets TERM_PROGRAM=iTerm.app).
 	IsITerm2 = env.Str("TERM_PROGRAM") == "iTerm.app"
 
-	// isVT is true when TERM is vt100 or vt220.
-	isVT = env.Str("TERM") == "vt100" || env.Str("TERM") == "vt220"
+	// IsVT is true when TERM is vt100 or vt220.
+	IsVT = env.Str("TERM") == "vt100" || env.Str("TERM") == "vt220"
 
 	// HasGraphics is true when the terminal supports an inline image protocol.
 	// It is disabled if TERM is vt100/vt220 or if NO_COLOR is set.
-	HasGraphics = (IsKitty || IsITerm2) && !isVT && !env.Bool("NO_COLOR")
+	HasGraphics = (IsKitty || IsITerm2) && !IsVT && !env.Bool("NO_COLOR")
 
 	// ImageExts lists file extensions handled by the image preview path.
 	ImageExts = map[string]bool{
