@@ -64,8 +64,8 @@ func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint, dr
 		return
 	}
 
-	width := int(cols)
-	height := int(rows)
+	width := int(cols) - 1
+	height := int(rows) - 1
 
 	// Terminal cells are taller than they are wide (typically ~2:1).
 	// Account for this so the image is not stretched or squished.
@@ -73,9 +73,9 @@ func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint, dr
 	cellRatio := float64(cH) / float64(cW) // e.g. 2.0 for 8x16 cells
 
 	// Given the available height, how wide should the image be?
-	targetW := int(float64(height) * (imgW / imgH) * cellRatio)
+	targetW := int(float64(height) * (imgW / imgH) * cellRatio) - 1
 	// Given the available width, how tall should the image be?
-	targetH := int(float64(width) * (imgH / imgW) / cellRatio)
+	targetH := int(float64(width) * (imgH / imgW) / cellRatio) - 1
 
 	if targetW < width {
 		width = targetW
