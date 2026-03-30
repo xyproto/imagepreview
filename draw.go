@@ -27,7 +27,7 @@ func DrawOnCanvas(canvas *vt.Canvas, m image.Image, drawRune rune) error {
 	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
 		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
 			if IsVT {
-				canvas.Plot(uint(x), uint(y), drawRune)
+				canvas.PlotColor(uint(x), uint(y), vt.White, drawRune)
 			} else {
 				c := color.NRGBAModel.Convert(img.At(x, y)).(color.NRGBA)
 				vc := vt.White // default
@@ -98,7 +98,7 @@ func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint, dr
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
 			if IsVT {
-				canvas.Plot(col+uint(x), row+uint(y), drawRune)
+				canvas.PlotColor(col+uint(x), row+uint(y), vt.White, drawRune)
 			} else {
 				c := color.NRGBAModel.Convert(indexedImg.At(x, y)).(color.NRGBA)
 				vc := vt.White // default
