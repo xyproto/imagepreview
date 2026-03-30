@@ -62,13 +62,20 @@ func DrawTextImage(canvas *vt.Canvas, path string, col, row, cols, rows uint) {
 	width := int(cols)
 	height := int(rows)
 
-	// Adjustment for terminal cell aspect ratio (roughly 2:1 height:width)
-	ratio := (imgH / imgW) * 2.0
+	// Terminal cells are taller than they are wide (typically ~2:1).
+	// Account for this so the image is not stretched or squished.
+	cW, cH := TerminalCellPixels()
+	cellRatio := float64(cH) / float64(cW) // e.g. 2.0 for 8x16 cells
 
-	if proportionalWidth := int(float64(height) / ratio); proportionalWidth < width {
-		width = proportionalWidth
-	} else if proportionalHeight := int(float64(width) * ratio); proportionalHeight < height {
-		height = proportionalHeight
+	// Given the available height, how wide should the image be?
+	targetW := int(float64(height) * (imgW / imgH) * cellRatio)
+	// Given the available width, how tall should the image be?
+	targetH := int(float64(width) * (imgH / imgW) / cellRatio)
+
+	if targetW < width {
+		width = targetW
+	} else if targetH < height {
+		height = targetH
 	}
 
 	if width <= 0 || height <= 0 {
