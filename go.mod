@@ -14,8 +14,8 @@ require (
 )
 
 require (
-	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
-	github.com/peterhellberg/gfx v0.0.0-20240717094052-4fa835cea5a4 // indirect
+	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
+	github.com/peterhellberg/gfx v0.0.0-20250602150231-2e41f5fad310 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/xyproto/burnfont v1.2.3 // indirect
 	github.com/xyproto/burnpal v1.0.0 // indirect

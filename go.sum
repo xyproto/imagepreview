@@ -4,11 +4,13 @@ github.com/dkua/go-ico v0.0.0-20161218204303-1c25f691ce06 h1:yKWwcHDMrhQ1Vle7iG4
 github.com/dkua/go-ico v0.0.0-20161218204303-1c25f691ce06/go.mod h1:ILJc15OqkUIbcYqL9A7W7xTsfOLRAKP0Jpl74ur9mm8=
 github.com/jsummers/gobmp v0.0.0-20230614200233-a9de23ed2e25 h1:YLvr1eE6cdCqjOe972w/cYF+FjW34v27+9Vo5106B4M=
 github.com/jsummers/gobmp v0.0.0-20230614200233-a9de23ed2e25/go.mod h1:kLgvv7o6UM+0QSf0QjAse3wReFDsb9qbZJdfexWlrQw=
-github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
 github.com/lucasb-eyer/go-colorful v1.2.0/go.mod h1:R4dSotOR9KMtayYi1e77YzuveK+i7ruzyGqttikkLy0=
+github.com/lucasb-eyer/go-colorful v1.4.0 h1:UtrWVfLdarDgc44HcS7pYloGHJUjHV/4FwW4TvVgFr4=
+github.com/lucasb-eyer/go-colorful v1.4.0/go.mod h1:R4dSotOR9KMtayYi1e77YzuveK+i7ruzyGqttikkLy0=
 github.com/peterhellberg/gfx v0.0.0-20191011152831-b91a0de61948/go.mod h1:itlt/V2ABb7sDu42VXQHXmQ4KOdrEbFZDVIaHsRcwak=
-github.com/peterhellberg/gfx v0.0.0-20240717094052-4fa835cea5a4 h1:Iv17i2mukPLwXTftiwj1bzOamqw1UVXm4vHGxKxi+1U=
 github.com/peterhellberg/gfx v0.0.0-20240717094052-4fa835cea5a4/go.mod h1:ipo3f7y1+RHNR32fj+4TETou6OF4VXvJBhb9rwncKuw=
+github.com/peterhellberg/gfx v0.0.0-20250602150231-2e41f5fad310 h1:GYpS3eYKhZmxRlKKAMaSRM/V+L6IPFlYd+IB/kc7TmU=
+github.com/peterhellberg/gfx v0.0.0-20250602150231-2e41f5fad310/go.mod h1:ipo3f7y1+RHNR32fj+4TETou6OF4VXvJBhb9rwncKuw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
