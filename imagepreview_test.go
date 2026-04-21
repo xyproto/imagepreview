@@ -36,7 +36,7 @@ func TestIsImageExt(t *testing.T) {
 	yes := []string{
 		"photo.png", "photo.PNG", "photo.jpg", "photo.jpeg",
 		"photo.gif", "photo.svg", "photo.bmp", "photo.webp",
-		"photo.qoi", "photo.ico", "photo.jxl",
+		"photo.qoi", "photo.ico", "photo.tiff", "photo.tif",
 	}
 	no := []string{"readme.md", "main.go", ""}
 
