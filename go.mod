@@ -10,7 +10,7 @@ require (
 	github.com/xfmoulet/qoi v0.2.0
 	github.com/xyproto/env/v2 v2.5.6
 	github.com/xyproto/palgen v1.6.1
-	github.com/xyproto/vt v1.8.4
+	github.com/xyproto/vt v1.8.5
 	golang.org/x/image v0.39.0
 	golang.org/x/sys v0.43.0
 )
