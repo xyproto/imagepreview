@@ -10,9 +10,9 @@ require (
 	github.com/xfmoulet/qoi v0.2.0
 	github.com/xyproto/env/v2 v2.5.6
 	github.com/xyproto/palgen v1.6.1
-	github.com/xyproto/vt v1.7.14
-	golang.org/x/image v0.38.0
-	golang.org/x/sys v0.42.0
+	github.com/xyproto/vt v1.8.3
+	golang.org/x/image v0.39.0
+	golang.org/x/sys v0.43.0
 )
 
 require (
@@ -21,7 +21,7 @@ require (
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/xyproto/burnfont v1.2.3 // indirect
 	github.com/xyproto/burnpal v1.0.0 // indirect
-	golang.org/x/net v0.52.0 // indirect
-	golang.org/x/term v0.41.0 // indirect
-	golang.org/x/text v0.35.0 // indirect
+	golang.org/x/net v0.53.0 // indirect
+	golang.org/x/term v0.42.0 // indirect
+	golang.org/x/text v0.36.0 // indirect
 )
