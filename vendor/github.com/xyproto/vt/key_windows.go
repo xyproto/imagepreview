@@ -5,6 +5,7 @@ package vt
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"strconv"
@@ -29,6 +30,7 @@ type TTY struct {
 	conin           *os.File
 	pending         []byte
 	escArmed        bool
+	reader          io.Reader
 }
 
 // NewTTY opens the terminal
@@ -91,6 +93,7 @@ func NewTTY() (*TTY, error) {
 		useConsoleInput: useConsoleInput,
 		conin:           conin,
 		pending:         make([]byte, 0),
+		reader:          nil,
 	}, nil
 }
 
@@ -119,6 +122,21 @@ func (tty *TTY) Poll(d time.Duration) (bool, error) {
 		return false, err
 	}
 	return event == windows.WAIT_OBJECT_0, nil
+}
+
+// HasPendingInput reports whether ReadKey would return another key without
+// having to wait — either bytes are already buffered inside the TTY or more
+// input is available on the console right now. Matches the Unix semantics so
+// callers can use it for frame-skipping in a cross-platform way.
+func (tty *TTY) HasPendingInput() bool {
+	if len(tty.pending) > 0 {
+		return true
+	}
+	ok, err := tty.Poll(0)
+	if err != nil {
+		return false
+	}
+	return ok
 }
 
 // Key reads the keycode or ASCII code
@@ -484,8 +502,8 @@ func (tty *TTY) readWithTimeoutConsole(b []byte) (int, error) {
 	return int(n), err
 }
 
-// String reads a string
-func (tty *TTY) String() string {
+// ReadKey reads a key sequence (or printable character) from the TTY.
+func (tty *TTY) ReadKey() string {
 	bytes := make([]byte, 6)
 	tty.SetTimeout(0)
 	numRead, err := tty.readWithTimeout(bytes)

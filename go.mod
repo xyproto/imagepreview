@@ -9,18 +9,18 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
 	github.com/xfmoulet/qoi v0.2.0
 	github.com/xyproto/env/v2 v2.5.6
-	github.com/xyproto/palgen v1.6.1
-	github.com/xyproto/vt v1.8.5
+	github.com/xyproto/palgen v1.7.0
+	github.com/xyproto/vt v1.9.7
 	golang.org/x/image v0.39.0
 	golang.org/x/sys v0.43.0
 )
 
 require (
 	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
-	github.com/peterhellberg/gfx v0.0.0-20250602150231-2e41f5fad310 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/xyproto/burnfont v1.2.3 // indirect
-	github.com/xyproto/burnpal v1.0.0 // indirect
+	github.com/xyproto/burnpal v1.1.0 // indirect
+	github.com/xyproto/gfx v1.0.0 // indirect
 	golang.org/x/net v0.53.0 // indirect
 	golang.org/x/term v0.42.0 // indirect
 	golang.org/x/text v0.36.0 // indirect
