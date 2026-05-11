@@ -11,8 +11,8 @@ require (
 	github.com/xyproto/oksvg v1.0.1
 	github.com/xyproto/palgen v1.7.0
 	github.com/xyproto/vt v1.9.11
-	golang.org/x/image v0.39.0
-	golang.org/x/sys v0.43.0
+	golang.org/x/image v0.40.0
+	golang.org/x/sys v0.44.0
 )
 
 require (
@@ -21,5 +21,5 @@ require (
 	github.com/xyproto/burnfont v1.2.3 // indirect
 	github.com/xyproto/burnpal v1.1.0 // indirect
 	github.com/xyproto/gfx v1.0.0 // indirect
-	golang.org/x/term v0.42.0 // indirect
+	golang.org/x/term v0.43.0 // indirect
 )
