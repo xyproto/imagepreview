@@ -9,10 +9,10 @@ require (
 	github.com/xfmoulet/qoi v0.2.0
 	github.com/xyproto/env/v2 v2.5.6
 	github.com/xyproto/oksvg v1.0.1
-	github.com/xyproto/palgen v1.7.0
+	github.com/xyproto/palgen v1.7.2
 	github.com/xyproto/vt v1.9.11
-	golang.org/x/image v0.40.0
-	golang.org/x/sys v0.44.0
+	golang.org/x/image v0.41.0
+	golang.org/x/sys v0.45.0
 )
 
 require (
