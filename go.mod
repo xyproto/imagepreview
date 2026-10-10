@@ -1,6 +1,6 @@
 module github.com/xyproto/imagepreview
 
-go 1.25.1
+go 1.26.0
 
 require (
 	github.com/dkua/go-ico v0.0.0-20161218204303-1c25f691ce06
@@ -9,17 +9,17 @@ require (
 	github.com/xfmoulet/qoi v0.2.0
 	github.com/xyproto/env/v2 v2.5.6
 	github.com/xyproto/oksvg v1.0.1
-	github.com/xyproto/palgen v1.7.2
-	github.com/xyproto/vt v1.9.11
-	golang.org/x/image v0.41.0
-	golang.org/x/sys v0.45.0
+	github.com/xyproto/palgen v1.7.3
+	github.com/xyproto/vt v1.9.20
+	golang.org/x/image v0.47.0
+	golang.org/x/sys v0.49.0
 )
 
 require (
-	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
+	github.com/lucasb-eyer/go-colorful v1.4.1 // indirect
+	github.com/peterhellberg/gfx v0.0.0-20260907063546-85ca1d9df3fe // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/xyproto/burnfont v1.2.3 // indirect
-	github.com/xyproto/burnpal v1.1.0 // indirect
-	github.com/xyproto/gfx v1.0.0 // indirect
-	golang.org/x/term v0.43.0 // indirect
+	github.com/xyproto/burnpal v1.1.1 // indirect
+	golang.org/x/term v0.47.0 // indirect
 )

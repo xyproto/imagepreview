@@ -8,9 +8,9 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"strconv"
 	"time"
-	"unicode"
+	"unicode/utf16"
+	"unicode/utf8"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -105,8 +105,20 @@ func (tty *TTY) SetTimeout(d time.Duration) (time.Duration, error) {
 	return saved, nil
 }
 
+// SetTimeoutNoSave sets the read timeout without saving the previous value
+func (tty *TTY) SetTimeoutNoSave(d time.Duration) error {
+	tty.timeout = d
+	return nil
+}
+
 // Close restores the terminal
 func (tty *TTY) Close() {
+	if tty.reader != nil {
+		if c, ok := tty.reader.(io.Closer); ok {
+			_ = c.Close()
+		}
+		return
+	}
 	tty.Restore()
 	if tty.conin != nil {
 		_ = tty.conin.Close()
@@ -116,6 +128,11 @@ func (tty *TTY) Close() {
 
 // Poll checks if data is available
 func (tty *TTY) Poll(d time.Duration) (bool, error) {
+	if tty.reader != nil {
+		// No cross-platform way to peek an arbitrary io.Reader; assume data
+		// is available (the reader will block on its own if not).
+		return true, nil
+	}
 	handle := windows.Handle(os.Stdin.Fd())
 	ms := uint32(d.Milliseconds())
 	event, err := windows.WaitForSingleObject(handle, ms)
@@ -380,8 +397,21 @@ func decodeConsoleKeyEvent(ke KEY_EVENT_RECORD) (ascii, keyCode int) {
 	return 0, 0
 }
 
+// readBytes is the single byte-read entry point used by ReadKey, Rune and
+// asciiAndKeyCode. When a mock reader has been installed via
+// NewTTYFromReader it is used instead of the console or PTY handle.
+func (tty *TTY) readBytes(buf []byte) (int, error) {
+	if tty.reader != nil {
+		return tty.reader.Read(buf)
+	}
+	return tty.readWithTimeout(buf)
+}
+
 // readWithTimeout implements reading with timeout on Windows
 func (tty *TTY) readWithTimeout(b []byte) (int, error) {
+	if tty.reader != nil {
+		return tty.reader.Read(b)
+	}
 	if tty.useConsoleInput {
 		return tty.readWithTimeoutConsole(b)
 	}
@@ -413,9 +443,7 @@ func (tty *TTY) readWithTimeoutPTY(b []byte) (int, error) {
 // readWithTimeoutConsole reads from Windows console with event filtering
 func (tty *TTY) readWithTimeoutConsole(b []byte) (int, error) {
 	if tty.timeout <= 0 {
-		var n uint32
-		err := windows.ReadFile(windows.Handle(tty.fd), b, &n, nil)
-		return int(n), err
+		return readConsoleUTF8(windows.Handle(tty.fd), b)
 	}
 
 	handle := windows.Handle(tty.fd)
@@ -498,48 +526,29 @@ func (tty *TTY) readWithTimeoutConsole(b []byte) (int, error) {
 		break
 	}
 
-	var n uint32
-	err = windows.ReadFile(handle, b, &n, nil)
-	return int(n), err
+	return readConsoleUTF8(handle, b)
 }
 
-// ReadKey reads a key sequence (or printable character) from the TTY.
-func (tty *TTY) ReadKey() string {
-	bytes := make([]byte, 6)
-	tty.SetTimeout(0)
-	numRead, err := tty.readWithTimeout(bytes)
-	if err != nil || numRead == 0 {
-		return ""
+// readConsoleUTF8 reads console input with ReadConsoleW and encodes it as UTF-8 into b
+func readConsoleUTF8(handle windows.Handle, b []byte) (int, error) {
+	toRead := uint32(len(b) / utf8.UTFMax)
+	if toRead == 0 {
+		var n uint32
+		err := windows.ReadFile(handle, b, &n, nil)
+		return int(n), err
 	}
-
-	switch {
-	case numRead == 1:
-		r := rune(bytes[0])
-		if unicode.IsPrint(r) {
-			return string(r)
-		}
-		return "c:" + strconv.Itoa(int(r))
-	case numRead == 3:
-		seq := [3]byte{bytes[0], bytes[1], bytes[2]}
-		if str, found := keyStringLookup[seq]; found {
-			return str
-		}
-		return string(bytes[:numRead])
-	case numRead == 4:
-		seq := [4]byte{bytes[0], bytes[1], bytes[2], bytes[3]}
-		if str, found := pageStringLookup[seq]; found {
-			return str
-		}
-		return string(bytes[:numRead])
-	case numRead == 6:
-		seq := [6]byte{bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5]}
-		if str, found := modKeyStringLookup[seq]; found {
-			return str
-		}
-		fallthrough
-	default:
-		return string(bytes[:numRead])
+	buf := make([]uint16, toRead)
+	var numRead uint32
+	if err := windows.ReadConsole(handle, &buf[0], toRead, &numRead, nil); err != nil {
+		var n uint32
+		err = windows.ReadFile(handle, b, &n, nil)
+		return int(n), err
 	}
+	n := 0
+	for _, r := range utf16.Decode(buf[:numRead]) {
+		n += utf8.EncodeRune(b[n:], r)
+	}
+	return n, nil
 }
 
 // Rune reads a rune
@@ -576,6 +585,9 @@ func (tty *TTY) Rune() rune {
 
 // RawMode switches the terminal to raw mode
 func (tty *TTY) RawMode() {
+	if tty.reader != nil {
+		return
+	}
 	if tty.useConsoleInput {
 		term.MakeRaw(tty.fd)
 	}
@@ -590,6 +602,9 @@ func (tty *TTY) NoBlock() {
 
 // Restore the terminal to its original state
 func (tty *TTY) Restore() {
+	if tty.reader != nil {
+		return
+	}
 	if tty.orig != nil {
 		term.Restore(tty.fd, tty.orig)
 	}
@@ -602,6 +617,9 @@ func (tty *TTY) RestoreNoFlush() {
 
 // Flush discards pending input/output
 func (tty *TTY) Flush() {
+	if tty.reader != nil {
+		return
+	}
 	// Windows FlushConsoleInputBuffer
 	windows.FlushConsoleInputBuffer(windows.Handle(tty.fd))
 }
